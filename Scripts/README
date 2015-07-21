@@ -1,0 +1,14 @@
+
+        README file of directory proben1/Scripts:
+      ============================================
+
+This directory contains various little Perl scripts that may be useful
+when preparing data files.
+
+These scripts are not needed to *use* PROBEN1.
+
+You can however use them if you want to prepare additional data files
+or if you want to change the representation used in one of the PROBEN1
+problems.
+Note that this directory must be in your PATH for the Makefiles that
+use these scripts to work.

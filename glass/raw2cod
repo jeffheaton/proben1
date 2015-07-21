@@ -1,0 +1,51 @@
+#!/tools/bin/perl
+#
+# Lutz Prechelt, 94/02/14
+#
+# Encodes 'xx' raw data file into a training file.
+#
+# usage: raw2cod inputfile >outputfile
+
+$nr = 1;
+@vals = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+while (<>) {
+  @F = split (",");
+
+  $v = ($F[1] - 1.51115)/(1.53393-1.51115);
+  printf ("%g ", $v);
+
+  $v = ($F[2] - 10.73)/(17.38-10.73);
+  printf ("%g ", $v);
+
+  $v = $F[3]/4.49;
+  printf ("%g ", $v);
+
+  $v = ($F[4] - 0.29)/(3.5-0.29);
+  printf ("%g ", $v);
+
+  $v = ($F[5] - 69.81)/(75.14-69.81);
+  printf ("%g ", $v);
+
+  $v = $F[6]/6.21;
+  printf ("%g ", $v);
+
+  $v = ($F[7] - 5.43)/(16.19-5.43);
+  printf ("%g ", $v);
+
+  $v = $F[8]/3.15;
+  printf ("%g ", $v);
+
+  $v = $F[9]/0.51;
+  printf ("%g ", $v);
+
+  $v = $F[10];
+  printf ("1 0 0 0 0 0") if ($v == 1);
+  printf ("0 1 0 0 0 0") if ($v == 2);
+  printf ("0 0 1 0 0 0") if ($v == 3);
+  printf ("0 0 0 1 0 0") if ($v == 5);
+  printf ("0 0 0 0 1 0") if ($v == 6);
+  printf ("0 0 0 0 0 1") if ($v == 7);
+  printf ("\n");
+
+}
+

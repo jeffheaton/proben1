@@ -1,0 +1,109 @@
+#!/tools/bin/perl
+#
+# Lutz Prechelt, 94/02/14
+#
+# Encodes 'card' raw data file into a training file.
+#
+# usage: raw2cod inputfile >outputfile
+
+$nr = 1;
+@vals = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+while (<>) {
+  @F = split (",");
+
+  $v = $F[0];
+  printf ("1 0 0 ") if ($v eq "b");
+  printf ("0 1 0 ") if ($v eq "a");
+  printf ("0 0 1 ") if ($v eq "?");
+
+  $v = $F[1];
+  if ($v eq "?") {
+    printf ("0 1 ");
+  }
+  else {
+    $v = ($v-13.75)/(80.25-13.75);
+    printf ("%g 0 ", $v);
+  }
+
+  $v = $F[2]/28;
+  printf ("%g ", $v);
+
+  $v = $F[3];
+  printf ("1 0 0 0 0 ") if ($v eq "u");
+  printf ("0 1 0 0 0 ") if ($v eq "y");
+  printf ("0 0 1 0 0 ") if ($v eq "l");
+  printf ("0 0 0 1 0 ") if ($v eq "t");
+  printf ("0 0 0 0 1 ") if ($v eq "?");
+
+  $v = $F[4];
+  printf ("1 0 0 0 ") if ($v eq "g");
+  printf ("0 1 0 0 ") if ($v eq "p");
+  printf ("0 0 1 0 ") if ($v eq "gg");
+  printf ("0 0 0 1 ") if ($v eq "?");
+
+  $v = $F[5];
+  printf ("1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ") if ($v eq "c");
+  printf ("0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 ") if ($v eq "d");
+  printf ("0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 ") if ($v eq "cc");
+  printf ("0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 ") if ($v eq "i");
+  printf ("0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 ") if ($v eq "j");
+  printf ("0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 ") if ($v eq "k");
+  printf ("0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 ") if ($v eq "m");
+  printf ("0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 ") if ($v eq "r");
+  printf ("0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 ") if ($v eq "q");
+  printf ("0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 ") if ($v eq "w");
+  printf ("0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 ") if ($v eq "x");
+  printf ("0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 ") if ($v eq "e");
+  printf ("0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 ") if ($v eq "aa");
+  printf ("0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 ") if ($v eq "ff");
+  printf ("0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 ") if ($v eq "?");
+
+  $v = $F[6];
+  printf ("1 0 0 0 0 0 0 0 0 0 ") if ($v eq "v");
+  printf ("0 1 0 0 0 0 0 0 0 0 ") if ($v eq "h");
+  printf ("0 0 1 0 0 0 0 0 0 0 ") if ($v eq "bb");
+  printf ("0 0 0 1 0 0 0 0 0 0 ") if ($v eq "j");
+  printf ("0 0 0 0 1 0 0 0 0 0 ") if ($v eq "n");
+  printf ("0 0 0 0 0 1 0 0 0 0 ") if ($v eq "z");
+  printf ("0 0 0 0 0 0 1 0 0 0 ") if ($v eq "dd");
+  printf ("0 0 0 0 0 0 0 1 0 0 ") if ($v eq "ff");
+  printf ("0 0 0 0 0 0 0 0 1 0 ") if ($v eq "o");
+  printf ("0 0 0 0 0 0 0 0 0 1 ") if ($v eq "?");
+
+  $v = $F[7]/28.5;
+  printf ("%g ", $v);
+
+  $v = $F[8];
+  printf ("%d ", $v eq "t" ? 1 : 0);
+
+  $v = $F[9];
+  printf ("%d ", $v eq "t" ? 1 : 0);
+
+  $v = $F[10]/67;
+  printf ("%g ", $v);
+
+  $v = $F[11];
+  printf ("%d ", $v eq "t" ? 1 : 0);
+
+  $v = $F[12];
+  printf ("1 0 0 ") if ($v eq "g");
+  printf ("0 1 0 ") if ($v eq "p");
+  printf ("0 0 1 ") if ($v eq "s");
+
+  $v = $F[13]/2000;
+  if ($v eq "?") {
+    printf ("0 1 ");
+  }
+  else {
+    printf ("%g 0 ", $v);
+  }
+
+  $v = log ($F[14]+1)/11.5;  #logarithmic from range 0...100000 to 0...1
+  printf ("%g ", $v);
+
+  $v = $F[15];
+  chop $v;
+  printf ("%s\n", $v eq "+" ? "1 0" : "0 1");
+}
+
+

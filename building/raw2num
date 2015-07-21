@@ -1,0 +1,21 @@
+#!/tools/bin/perl
+#
+# Lutz Prechelt, 27.04.93
+#
+# The first three columns of the input file are replaced by a 
+# running line number
+# usage: raw2num inputfile >outputfile
+
+$nr = 1;
+
+while (<>) {
+  @F = split;
+  #Old:1   2    3     4     5     6      7      8     9      10    11
+  #New:               2     3     4      5      6     7       8     9
+  #MONTH  DAY  YEAR  HOUR  TEMP  HUMID  SOLAR  WIND  WBE    WBCW  WBHW
+  #  9     1    89    300  80.7  0.0187  0     7.94  497.06  7.1  0.5
+
+  printf (STDOUT "%d %2d  %5.1f  %8.6f  %6.1f %5.2f %6.2f  %3.1f %3.1f\n", 
+          $nr, $F[4]/100, $F[5], $F[6], $F[7], $F[8], $F[9], $F[10], $F[11]);
+  $nr++;
+}

@@ -1,0 +1,108 @@
+#!/tools/bin/perl -s
+#
+# Lutz Prechelt, 94/02/14
+#
+# Encodes 'heart' raw data file into a training file.
+#
+# usage: raw2cod [-classifier] inputfile >outputfile
+
+$nr = 1;
+#Input:  attr0,attr1,attr2,attr3,....,attr12,output
+#attributes are comma-separated
+while (<>) {
+  @F = split (',');
+
+  $v = ($F[0] - 28)/(77-27); #use 27 instead of 28 to get smooth numbers (/50)
+  printf ("%g ", $v);
+
+  printf ("%s ", $F[1] == 1 ? "1" : "0");
+
+  $v = $F[2];
+  printf ("1 0 0 0 0 ") if ($v == 1);
+  printf ("0 1 0 0 0 ") if ($v == 2);
+  printf ("0 0 1 0 0 ") if ($v == 3);
+  printf ("0 0 0 1 0 ") if ($v == 4);
+  printf ("0 0 0 0 1 ") if ($v eq "?" || $v == 0);
+
+  $v = $F[3];
+  if ($v eq "?" || $v == 0) {
+    printf ("0 1 ");
+  }
+  else {
+    $v = ($F[3] - 80)/(200-80);
+    printf ("%g 0 ", $v);
+  }
+
+  $v = $F[4];
+  if ($v eq "?" || $v == 0) {
+    printf ("0 1 ");
+  }
+  else {
+    $v = ($v - 85)/(605-85);  #605 instead of 603 smoothes values
+    printf ("%g 0 ", $v);
+  }
+
+  $v = $F[5];
+  printf ("%s ", $v eq "?" ? "0 0 1" : ($v == 1 ? "0 1 0" : "0 0 0"));
+
+  $v = $F[6];
+  printf ("1 0 0 0 ") if ($v ne "?" && $v == 0);
+  printf ("0 1 0 0 ") if ($v == 1);
+  printf ("0 0 1 0 ") if ($v == 2);
+  printf ("0 0 0 1 ") if ($v eq "?");
+
+  $v = $F[7];
+  if ($v eq "?" || $v == 0) {
+    printf ("0 1 ");
+  }
+  else {
+    $v = ($v - 60)/(210-60);  #210 instead 202 smoothes values
+    printf ("%g 0 ", $v);
+  }
+
+  $v = $F[8];
+  printf ("%s ", $v eq "?" ? "0 0 1" : ($v == 1 ? "0 1 0" : "0 0 0"));
+
+  $v = $F[9];
+  if ($v eq "?") {
+    printf ("0 1 ");
+  }
+  else {
+    $v = ($v - -2.6)/(6.2- -2.6);
+    printf ("%g 0 ", $v);
+  }
+
+  $v = $F[10];
+  printf ("1 0 0 0 ") if ($v == 1);
+  printf ("0 1 0 0 ") if ($v == 2);
+  printf ("0 0 1 0 ") if ($v == 3);
+  printf ("0 0 0 1 ") if ($v eq "?" || $v == 0);
+
+  $v = $F[11];
+  if ($v eq "?") {
+    printf ("0 1 ");
+  }
+  else {
+    $v = ($v - 0)/(3-0);
+    printf ("%g 0 ", $v);
+  }
+
+  $v = $F[12];
+  printf ("1 0 0 0 ") if ($v == 3);
+  printf ("0 1 0 0 ") if ($v == 6);
+  printf ("0 0 1 0 ") if ($v == 7);
+  printf ("0 0 0 1 ") if ($v eq "?");
+
+  if ($classifier) {
+    # encode only ill/non-ill as 1-of-2 value:
+    $v = $F[13];
+    printf ("%s\n", $v == 0 ? "1 0" : "0 1");
+  }
+  else {
+    # encode illness as quasi-continuous value on a distorted scale:
+    $v = $F[13]/10 + 0.1;  # 0, 1, 2, 3, 4  -->  0.1, 0.6, 0.7, 0.8, 0.9
+    $v += 0.4  if ($v > 0.15);
+    printf ("%g\n", $v);
+  }
+}
+

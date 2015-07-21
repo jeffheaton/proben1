@@ -1,0 +1,53 @@
+
+ Files in the 'proben1/cancer' directory:
+==========================================
+
+This dataset is from the UCI machine learning dataset:
+"Wisconsin breast cancer database"
+
+[Remark: some of the generated files may not exist in order to save disk space]
+
+breast-cancer-wisconsin.names
+  Original documentation for the dataset
+
+breast-cancer-wisconsin.data
+  Original data file
+
+cancer.raw
+  Symbolic link to breast-cancer-wisconsin.data
+
+cancer.cod
+  cancer.raw encoded (using raw2cod)
+
+header
+  Header lines used in .dt files
+
+cancer?.dt
+  different permutations of the lines of cod file plus the header lines
+
+raw2cod
+  Perl script for format conversions:
+  takes xx.raw as input and produces xx.cod as output according
+  to the rules given in section 'design' below.
+
+Makefile
+  Makefile to call scripts and programs to create .dt files
+
+
+ 
+ Encoding:
+===========
+
+There are 9 input attributes, all discrete on a scale 1 - 10 (integer)
+and 1 binary output attribute (2=benign, 4=malignant).
+This encoding is used directly, except that the values are scaled
+to a 0...1 range and that the output is represented with two units.
+There are 16 missing values for attribute 6; they are encoded as 0.3 since
+the average value of that attribute is rougly 3.5.
+
+Class distribution:
+Class    benign   malign    total
+---------------------------------------
+total #   458       241      699
+total %    66        34      100
+

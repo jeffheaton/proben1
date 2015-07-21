@@ -1,0 +1,86 @@
+
+ Files in the 'proben1/mushroom' directory:
+=============================================
+
+This dataset is from the UCI machine learning database:
+"mushroom"
+
+[Remark: some of the generated files may not exist in order to save disk space]
+
+agaricus-lepiota.names
+README.orig
+  Original documentation for the dataset
+
+agaricus-lepiota.data
+  Original data file
+
+mushroom.raw
+  Symbolic link to agaricus-lepiota.data
+
+mushroom.cod
+  agaricus-lepiota.data encoded in the way described in the 'encoding'
+  section below
+
+header
+  Header lines used in .dt files
+
+mushroom?.dt
+  different permutations of the lines of mushroom.cod plus the header lines
+
+raw2cod
+  Perl script for format conversions:
+  takes mushroom.raw as input and produces mushroom.cod as output according
+  to the rules given in section 'encoding' below.
+
+Makefile
+  Makefile to call scripts to create .dt files
+
+
+ Encoding:
+===========
+
+Output: The output encoding is a 1-of-2 encoding as follows:
+          edible: 1 0  poisonous: 0 1
+Input:  Each n-valued nominal input is represented by a 1-of-n encoding
+        using n input values. The relevant input is 1, others are 0.
+        This results in having 125 input values to the network:
+ 6   1. cap-shape:                bell=b,conical=c,convex=x,flat=f,
+                                  knobbed=k,sunken=s
+ 4   2. cap-surface:              fibrous=f,grooves=g,scaly=y,smooth=s
+10   3. cap-color:                brown=n,buff=b,cinnamon=c,gray=g,green=r,
+                                  pink=p,purple=u,red=e,white=w,yellow=y
+ 2   4. bruises?:                 bruises=t,no=f
+ 9   5. odor:                     almond=a,anise=l,creosote=c,fishy=y,foul=f,
+                                  musty=m,none=n,pungent=p,spicy=s
+ 4   6. gill-attachment:          attached=a,descending=d,free=f,notched=n
+ 3   7. gill-spacing:             close=c,crowded=w,distant=d
+ 2   8. gill-size:                broad=b,narrow=n
+12   9. gill-color:               black=k,brown=n,buff=b,chocolate=h,gray=g,
+                                  green=r,orange=o,pink=p,purple=u,red=e,
+                                  white=w,yellow=y
+ 2  10. stalk-shape:              enlarging=e,tapering=t
+ 6! 11. stalk-root:               bulbous=b,club=c,cup=u,equal=e,
+                                  rhizomorphs=z,rooted=r,missing=?
+ 4  12. stalk-surface-above-ring: ibrous=f,scaly=y,silky=k,smooth=s
+ 4  13. stalk-surface-below-ring: ibrous=f,scaly=y,silky=k,smooth=s
+ 9  14. stalk-color-above-ring:   brown=n,buff=b,cinnamon=c,gray=g,orange=o,
+                                  pink=p,red=e,white=w,yellow=y
+ 9  15. stalk-color-below-ring:   brown=n,buff=b,cinnamon=c,gray=g,orange=o,
+                                  pink=p,red=e,white=w,yellow=y
+ 2  16. veil-type:                partial=p,universal=u
+ 4  17. veil-color:               brown=n,orange=o,white=w,yellow=y
+ 3  18. ring-number:              none=n,one=o,two=t
+ 8  19. ring-type:                cobwebby=c,evanescent=e,flaring=f,large=l,
+                                  none=n,pendant=p,sheathing=s,zone=z
+ 9  20. spore-print-color:        black=k,brown=n,buff=b,chocolate=h,green=r,
+                                  orange=o,purple=u,white=w,yellow=y
+ 6  21. population:               abundant=a,clustered=c,numerous=n,
+                                  scattered=s,several=v,solitary=y
+ 7  22. habitat:                  grasses=g,leaves=l,meadows=m,paths=p,
+                                  urban=u,waste=w,woods=d
+---
+125
+   Records: 8124
+   Missing Attribute Values: 2480 of them (denoted by "?"), all for
+   attribute #11 are encoded by all zero.
+       

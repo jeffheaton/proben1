@@ -1,0 +1,7 @@
+bool_in=0
+real_in=24
+bool_out=0
+real_out=3
+training_examples=533
+validation_examples=267
+test_examples=266

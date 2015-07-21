@@ -1,0 +1,63 @@
+#!/tools/bin/perl
+#
+# Lutz Prechelt, 94/02/16
+#
+# Encodes 'flare' raw data file into a training file.
+#
+# usage: raw2cod inputfile >outputfile
+
+$nr = 1;
+@vals = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+while (<>) {
+  @F = split;
+
+  $v = $F[0];
+  $i = index ("ABCDEFH", $v);
+  $vals[$i] = 1;
+  printf ("%s ", join (" ", @vals[0..6]));
+  $vals[$i] = 0;
+
+  $v = $F[1];
+  $i = index ("XRSAHK", $v);
+  $vals[$i] = 1;
+  printf ("%s ", join (" ", @vals[0..5]));
+  $vals[$i] = 0;
+
+  $v = $F[2];
+  $i = index ("XOIC", $v);
+  $vals[$i] = 1;
+  printf ("%s ", join (" ", @vals[0..3]));
+  $vals[$i] = 0;
+
+  $v = $F[3];
+  printf ("%d ", $v-1);
+
+  $v = $F[4];
+  printf ("%g ", ($v-1)/2);
+
+  $v = $F[5];
+  printf ("%g ", ($v-1)/2);
+
+  $v = $F[6];
+  printf ("%d ", $v-1);
+
+  $v = $F[7];
+  printf ("%d ", $v-1);
+
+  $v = $F[8];
+  printf ("%d ", $v-1);
+
+  $v = $F[9];
+  printf ("%d ", $v-1);
+
+  $v = $F[10];
+  printf ("%g ", $v/8);
+
+  $v = $F[11];
+  printf ("%g ", $v/8);
+
+  $v = $F[12];
+  printf ("%g\n", $v/2);
+
+}
+

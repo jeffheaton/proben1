@@ -1,0 +1,24 @@
+#!/tools/bin/perl
+#
+# Lutz Prechelt, 94/01/24
+#
+# Encodes 'thyroid' raw data file into a training file.
+#
+# usage: raw2cod inputfile >outputfile
+
+$nr = 1;
+while (<>) {
+  @vals = split;
+  $class = $vals[$#vals];
+  printf ("%s ", join (" ", @vals[0..20]));
+  die "illegal class $class\n" if ($class < 1 || $class > 3);
+  if ($class == 1) {
+    printf ("1 0 0\n");
+  }
+  elsif ($class == 2) {
+    printf ("0 1 0\n");
+  }
+  else {
+    printf ("0 0 1\n");
+  }
+}

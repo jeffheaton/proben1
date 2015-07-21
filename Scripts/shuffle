@@ -1,0 +1,37 @@
+#!/usr/local/bin/perl
+#
+# Lutz Prechelt, 1992/05/02
+#
+# The files given are shuffled into a random order of lines.
+
+die "usage: shuffle filename...
+   Shuffles lines into random order. Files are changed!\n" if ($#ARGV == -1);
+
+srand (time + $$);
+select (STDOUT); $| = 1;  # make stdout unbuffered
+foreach $filename (@ARGV) {
+  &shuffle ($filename);
+}
+
+sub shuffle {
+  $filename = $_[0];
+  open (FILE, $filename) || die "can't open '$filename'";
+  print $filename, ": ";
+  @lines = <FILE>;
+  close (FILE);
+  print ($#lines+1, " lines ");
+  for ($i = 1; $i <= $#lines; $i++) {
+    $newpos = int (rand($i) + 0.5);  # random from interval 0..i
+    $help = $lines[$i];               # swap (lines[i], lines[newpos])
+    $lines[$i] = $lines[$newpos];
+    $lines[$newpos] = $help;
+  }
+  print "shuffled";
+  open (FILE, ">".$filename) || die "   can't write '$filename'";
+  print (FILE @lines);
+  close (FILE);
+  print ".\n";
+}
+
+
+

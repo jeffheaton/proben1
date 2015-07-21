@@ -1,0 +1,149 @@
+
+ Files in the 'proben1/heart' directory:
+=========================================
+
+This dataset is from the UCI machine learning database:
+"heart-disease"
+
+[Remark: some of the generated files may not exist in order to save disk space]
+
+
+heart-disease.names
+  Original documentation for the dataset
+
+processed.*.data
+  Original data files (* is one of: cleveland, hungarian, switzerland, va)
+
+heartc.raw
+  equals processed.cleveland.data
+
+heart.raw
+  concatenation of all four processed.*.data files
+
+heartc.cod
+heart.cod
+heartac.cod
+hearta.cod
+  raw files converted according to encoding described below
+  In the normal files, output is encoded as 1-of-2 to discriminate
+  only ill and non-ill. In the files with an additional 'a' in their name,
+  output is encoded as continuous ('analog' encoding).
+
+header_c
+header
+header_ac
+header_a
+  Header lines used in the respective .dt files
+
+heartc?.dt
+heart?.dt
+heartac?.dt
+hearta?.dt
+  different permutations of the lines of the respective .cod files,
+  plus the header lines.
+
+raw2cod
+  Perl script for format conversions:
+  takes heart*.raw as input and produces heart*.cod as output according
+  to the rules given in section 'encoding' below. Accepts option -classifier
+  to generate 1-of-2 output encoding. Without the option uses
+  analog encoding.
+
+Makefile
+  Makefile to call scripts and programs to create .dt files
+
+ 
+ Encoding:
+===========
+
+This problem is quite interesting, because (a) there is not much training
+data available, (b) there are many missing values (except in Cleveland data),
+(c) the output is 0, 1, 2, or 3 but we are interested only in 0 or non-0.
+
+In 920 records total, only 299 records (all from Cleveland) are complete,
+that is, 67.5% of all records have at least one missing value.
+Of 11960 total input attribute values 1759, that is 14.7%, are missing.
+
+The attribute meaning and encoding is as follows:
+
+0. #3  (age)       
+  1 (continuous)  28...77 --> 0...1
+1. #4  (sex)       
+  1 (binary)
+2. #9  (cp) chest pain type  1: typical angina,   2: atypical angina
+                             3: non-anginal pain  4: asymptomatic
+  4 (nominal, 1 of 4)
+  1 (binary, 0:attrmissing 0:attrpresent)
+3. #10 (trestbps) trestbps: resting blood pressure
+  1 (continuous)  80...200
+  1 (binary, 1:attrmissing 0:attrpresent)
+4. #12 (chol) serum cholestoral in mg/dl     
+  1 (continuous)  85...603
+  1 (binary, 1:attrmissing 0:attrpresent)
+5. #16 (fbs)  (fasting blood sugar > 120 mg/dl)  (1 = true; 0 = false)
+  2 (nominal, 1 of 2)
+  1 (binary, 1:attrmissing 0:attrpresent)
+6. #19 (restecg)  resting electrocardiographic results
+         0: normal   1: ST-T wave abnormality  2: left ventricular hypertrophy
+  3 (nominal, 1 of 3)
+  1 (binary, 1:attrmissing 0:attrpresent)
+7. #32 (thalach)   maximum heart rate achieved
+  1 (continuous)  60...202
+  1 (binary, 1:attrmissing 0:attrpresent)
+8. #38 (exang)     exercise induced angina (1 = yes; 0 = no)
+  2 (nominal, 1 of 2)
+  1 (binary, 1:attrmissing 0:attrpresent)
+9. #40 (oldpeak) ST depression induced by exercise relative to rest
+  1 (continuous)  -2.6...6.2
+  1 (binary, 1:attrmissing 0:attrpresent)
+10. #41 (slope)   the slope of the peak exercise ST segment
+       1: upsloping   2: flat  3: downsloping
+  3 (nominal, 1 of 3)
+  1 (binary, 1:attrmissing 0:attrpresent)
+11. #44 (ca)  number of major vessels (0-3) colored by flourosopy
+  1 (continuous)  0...3
+  1 (binary, 1:attrmissing 0:attrpresent)
+12. #51 (thal)  3: normal;  6: fixed defect;  7: reversable defect
+  3 (nominal, 1 of 3)
+  1 (binary, 1:attrmissing 0:attrpresent)
+-------------
+ 35 inputs
+
+13. #58 (num)  (the predicted attribute: 0=healthy, 1-4: increasingly sick)
+  two versions:  a). 0,1,2,3,4 --> 0.1, 0.6, 0.7, 0.8, 0.9  OR
+                 b). 0 -> 1 0    other -> 0 1
+-------------
+  1 or 2 outputs
+
+------------------------------------------------------------------------
+~/cupit2/data/heart 83 > countmiss processed.cleveland.data 
+class missing
+ 11     4
+ 12     2
+303 records total
+~/cupit2/data/heart 84 > countmiss processed.*.data
+class missing
+  3    59
+  4    30
+  5    90
+  6     2
+  7    55
+  8    55
+  9    62
+ 10   309
+ 11   611
+ 12   486
+920 records total
+------------------------------------------------------------------------
+
+Class distribution:
+> grep '0$' heart.raw | wc -l       etc.
+
+Class         0      1      2      3    4   total
+--------------------------------------------------
+heart  #    411    265    109    107   28    920
+heart  %   44.7   28.8   11.8   11.6  3.0   99.9
+
+heartc #    164    55      36     35   13    303
+heartc %   54.1   18.2   11.9   11.6  4.3  100.1
+

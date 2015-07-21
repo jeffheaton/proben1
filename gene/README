@@ -1,0 +1,68 @@
+
+ Files in the 'proben1/gene' directory:
+========================================
+
+This dataset is from the UCI machine learning database:
+"splice-junction gene sequences"
+
+[Remark: some of the generated files may not exist in order to save disk space]
+
+splice.names
+  Original documentation for the dataset
+
+splice.data
+  Original data file
+
+splice.theory
+  Domain theory for the dataset:
+   "If exact matches are required, then this set of rules correctly identifies 
+    40% of the IE examples, 4% of the EI examples and 99% of the neither
+    examples. 48 examples are falsely classed as IE. No examples are falsely
+    classed as EI."
+
+gene.cod
+  train.num encoded in the way described in the 'design' section below
+
+header
+  Header lines used in .dt files
+
+gene?.dt
+  different permutations of the lines of gene.cod plus the header lines
+
+raw2cod
+  Perl script for format conversions:
+  takes gene.data as input and produces gene.cod as output according
+  to the rules given in section 'design' below.
+
+Makefile
+  Makefile to call scripts to create .dt  files
+
+ 
+ Encoding:
+===========
+
+Output: The output encoding is a simple 1-of-3 encoding as follows:
+          EI  1 0 0
+          IE  0 1 0
+          N   0 0 1        
+Input:  Each nucleotide in the gene sequence window is represented by
+        a pair of inputs, using the following binary encoding:
+          C   -1  -1
+          A   -1   1
+          G    1  -1
+          T    1   1
+        This results in having 120 inputs to the network.
+
+
+Remarks:
+  a few lines in the file had one or several nucleotid codes 'N' in the
+  sequence window, meaning unknown nucleotids.
+  These have been filtered out.
+  The previous result file gene.cod had lines with
+       1 x length  125 (368-125 = number of 'N' nucleotides)
+       1 x length  353
+       3 x length  359
+      10 x length  365
+    3175 x length  368
+  Now the illegal shorter lines have been left out.
+

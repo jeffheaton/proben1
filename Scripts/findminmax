@@ -1,0 +1,30 @@
+#!/usr/local/bin/perl
+#
+# Lutz Prechelt, 94/02/14
+#
+# determine minima and maxima of columns
+# fields separated by colsep character, missing values represented by '?'
+# or sometimes by 0 (thus zeroes are ignored on minmax computation!!)
+#
+# usage: findminmax inputfile
+
+for ($i = 0; $i <= 300; $i++) {  # handles up to 300 columns
+  $min[$i] =  1e30;
+  $max[$i] = -1e30;
+}
+while (<>) {
+  @vals = split (/[, \t\n]+/);
+  for ($i = 0; $i <= $#vals; $i++) {
+    $v = $vals[$i];
+    if ($v ne "?") {
+      $max[$i] = $v if ($v > $max[$i]);
+      $min[$i] = $v if ($v < $min[$i]);
+    }
+  }
+}
+$cols = $#vals+1;
+printf ("#lastrecordcols: %d  min[lastfield+1]: %g  max[lastfield+1]: %g\n",
+        $cols, $min[$cols], $max[$cols]);
+for ($i = 0; $i <= $#vals; $i++) {
+  printf ("%3d: %g...%g\n", $i, $min[$i], $max[$i]);
+}

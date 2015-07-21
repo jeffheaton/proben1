@@ -1,0 +1,65 @@
+#!/usr/local/bin/perl
+#
+# Lutz Prechelt, 1993/04/28
+#
+# Partition the input file into two parts of different size.
+#
+
+die "
+usage: partition [-s] rel_size in out1 out2
+ rel_size = k means that k-1 records are put to out1 then 1 to out2
+ -s means that a stochastic partitioning is done instead of a deterministic
+ one. In this case rel_size is the percentage of records to put into out2."
+ if ($#ARGV != 3 && $#ARGV != 4);
+
+srand;
+if ($ARGV[0] eq "-s") {
+  $stochastic = 1;
+  @ARGV = @ARGV[1..$#ARGV];
+}
+else {
+  $stochastic = 0;
+}
+
+$rel_size = $ARGV[0];
+$in = $ARGV[1];
+$out1 = $ARGV[2];
+$out2 = $ARGV[3];
+open (IN, $ARGV[1]) || die "can't open '$ARGV[1]'";
+open (OUT1, ">$ARGV[2]") || die "can't write '$ARGV[2]'";
+open (OUT2, ">$ARGV[3]") || die "can't write '$ARGV[3]'";
+
+$count  = 0;
+$count1 = 0;
+$count2 = 0;
+
+if ($stochastic) {
+  print ("Stochastic partitioning of $in:\n");
+  while (<IN>) {
+    $count++;
+    if (rand (100) < $rel_size) {
+      print (OUT2 $_);
+      $count2++;
+    }
+    else {
+      print (OUT1 $_);
+      $count1++;
+    }    
+  }
+}
+else {
+  print ("Deterministic partitioning of $in:\n");
+  while (<IN>) {
+    $count++;
+    if ($count % $rel_size == 0) {
+      print (OUT2 $_);
+      $count2++;
+    }
+    else {
+      print (OUT1 $_);
+      $count1++;
+    }    
+  }
+}
+printf ("%d records, %d to $out1 (%.0f%%), %d to $out2 (%.0f%%)\n",
+        $count, $count1, 100*$count1/$count, $count2, 100*$count2/$count);

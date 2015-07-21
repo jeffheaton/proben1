@@ -1,0 +1,83 @@
+#!/usr/local/bin/perl
+#
+# Lutz Prechelt, 94/07/26
+#
+# convert header lines of data files from Lutz Prechelt's special format
+# into the format used by PROBEN1.
+# My format looks as follows:
+#int_in=0
+#real_in=9
+#int_out=0
+#real_out=6
+#add_bias_in=1
+#examples=214
+#format=tp
+#
+# where for the data files considered int_in and int_out is always 0,
+# add_bias_in is always 1, and format is always tp.
+# Whether the inputs and outputs in the output headers shall be bool
+# or real is indicated by two single letter command line arguments
+# being 'b' for bool or 'r' for real, for the inputs and outputs, respectively.
+#
+# The file is edited in place: it is slurped into memory completely
+# and then output onto the same file name.
+# Note that this means that the file can be lost if the program fails
+# after opening the file for output.
+#
+# usage: convertheaders intype outtype file...
+
+$intype  = shift;
+$outtype = shift;
+
+die "usage: convertheaders intype outtype file...
+    (e.g. convertheaders r b glass*.dt)
+  converts headers from Lutz's format into PROBEN format.
+" if ($intype ne "b" && $intype ne "r") ||
+     ($outtype ne "b" && $outtype ne "r");
+     
+foreach (@ARGV) {
+  open (F, $_) || die "can't read $_: $!";
+  print (STDERR "$_: ");
+  #----- read:
+  $ii = <F>;    # int_in
+  $ri = <F>;    # real_in
+  $io = <F>;    # int_out
+  $ro = <F>;    # real_out
+  $bias = <F>;  # add_bias_in
+  $exN = <F>;   # examples
+  $fo = <F>;    # format
+  @data = <F>;  # slurp all the data
+  close (F) || die "can't close $_: $!";
+  #----- compute new header info:
+  if ($fo !~ /format=/) {  # very simple sanity check
+    print (STDERR "'$_' not in correct input format. Skipped.\n");
+    next;  # leave this file as is.
+  }
+  $ii =~ s/int_in=//;      chop ($ii);
+  $ri =~ s/real_in=//;     chop ($ri);
+  $io =~ s/int_out=//;     chop ($io);
+  $ro =~ s/real_out=//;    chop ($ro);
+  $exN =~ s/examples=//;   chop ($exN);
+  #print ("$ii|$ri|$io|$ro|$exN\n");
+  $trExN = int(($exN+1)/2);
+  $vaExN = int(($exN-$trExN+1)/2);
+  $teExN = $exN - $trExN - $vaExN;
+  if ($intype eq "b") {
+    $ii = $ri; $ri = 0;
+  }
+  if ($outtype eq "b") {
+    $io = $ro; $ro = 0;
+  }
+  #----- write:
+  open (F, ">$_") || die "can't write $_: $!";
+  print (F "bool_in=$ii\n");
+  print (F "real_in=$ri\n");
+  print (F "bool_out=$io\n");
+  print (F "real_out=$ro\n");
+  print (F "training_examples=$trExN\n");
+  print (F "validation_examples=$vaExN\n");
+  print (F "test_examples=$teExN\n");
+  print (F @data);
+  close (F) || die "can't close $_: $!";
+  print (STDERR "converted.\n");
+}

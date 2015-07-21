@@ -1,0 +1,21 @@
+#!/usr/local/bin/perl
+#
+# Lutz Prechelt, 94/01/24
+#
+# Count missing values (marked as '?') in various attribute fields
+# Fields are separated by blanks, tabs, or commas.
+#
+# usage: countmiss inputfile
+
+
+$attrN = $#;
+while (<>) {
+  @vals = split (/[, \t\n]+/);
+  for ($i = 0; $i <= $#vals; $i++) {
+    $miss[$i]++  if $vals[$i] eq "?";
+  }
+}
+printf ("class missing\n");
+for ($i = 0; $i <= $#miss; $i++) {
+  printf ("%3d  %4d\n", $i, $miss[$i])  if $miss[$i] != 0;
+}

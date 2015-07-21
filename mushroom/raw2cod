@@ -1,0 +1,152 @@
+#!/tools/bin/perl
+#
+# Lutz Prechelt, 94/02/16
+#
+# Encodes 'mushroom' raw data file into a training file.
+#
+# usage: raw2cod inputfile >outputfile
+
+$nr = 1;
+@vals = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+while (<>) {
+  $a = $_;
+  #Input:  class,attr1,attr2,attr3,....,attr22
+  #each attribute value is but a single character
+
+  $v = substr ($a, 2, 1);
+  $i = index ("bcxfks", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..5]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 4, 1);
+  $i = index ("fgys", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..3]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 6, 1);
+  $i = index ("nbcgrpuewy", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..9]));
+  $vals[$i] = 0;
+
+
+  $v = substr ($a, 8, 1);
+  $i = index ("tf", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..1]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 10, 1);
+  $i = index ("alcyfmnps", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..8]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 12, 1);
+  $i = index ("adfn", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..3]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 14, 1);
+  $i = index ("cwd", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..2]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 16, 1);
+  $i = index ("bn", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..1]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 18, 1);
+  $i = index ("knbhgropuewy", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..11]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 20, 1);
+  $i = index ("et", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..1]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 22, 1);
+  $i = index ("bcuezr?", $v);
+  $vals[$i] = $i == 6 ? 0 : 1;  #----- missing values !
+  printf ("%s  ", join (" ", @vals[0..5]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 24, 1);
+  $i = index ("fyks", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..3]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 26, 1);
+  $i = index ("fyks", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..3]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 28, 1);
+  $i = index ("nbcgopewy", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..8]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 30, 1);
+  $i = index ("nbcgopewy", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..8]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 32, 1);
+  $i = index ("pu", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..1]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 34, 1);
+  $i = index ("nowy", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..3]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 36, 1);
+  $i = index ("not", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..2]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 38, 1);
+  $i = index ("ceflnpsz", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..7]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 40, 1);
+  $i = index ("knbhrouwy", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..8]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 42, 1);
+  $i = index ("acnsvy", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..5]));
+  $vals[$i] = 0;
+
+  $v = substr ($a, 44, 1);
+  $i = index ("glmpuwd", $v);
+  $vals[$i] = 1;
+  printf ("%s  ", join (" ", @vals[0..6]));
+  $vals[$i] = 0;
+
+  #---output:
+  $v = substr ($a, 0, 1);
+  printf ("%s\n", $v eq "e" ? "1 0" : "0 1");
+}

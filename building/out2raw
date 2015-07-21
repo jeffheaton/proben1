@@ -1,0 +1,28 @@
+#!/tools/bin/perl
+#
+# Lutz Prechelt, 30.04.93
+#
+# Decodes the three -1..1 outputs of the network back to the original ranges
+# and formats them in a way that can be pasted straight into the result file.
+# Note that the constant factors in the calculation of $Nwbe etc. have
+# to be compatible with those given in num2cod !
+#
+# usage: out2res inputfile >outputfile
+
+while (<>) {
+  ($wbe, $wbcw, $wbhw) = split;
+  #print ("$wbe, $wbcw, $wbhw\n");
+  #Input:   1       2    2
+  #        WBE    WBCW  WBHW
+
+  ##### wbe, wbcw, wbhw:   3 fields -1...1 range
+  $wbe  = ($wbe + 1) / 2;
+  $wbcw = ($wbcw + 1) / 2;
+  $wbhw = ($wbhw + 1) / 2;
+  $Nwbe  = $wbe  * (1300 - 0) +  0;
+  $Nwbcw = $wbcw * (11 - -1)  + -1;
+  $Nwbhw = $wbhw * (8 - -0.8) + -0.8;
+  printf (STDOUT "   %6.2f     %4.1f     %4.1f", $Nwbe, $Nwbcw, $Nwbhw);
+
+  print ("\n");
+}

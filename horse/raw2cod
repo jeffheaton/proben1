@@ -1,0 +1,210 @@
+#!/tools/bin/perl
+#
+# Lutz Prechelt, 94/02/28
+#
+# Encodes 'horse' raw data file into a training file.
+#
+# usage: raw2cod inputfile >outputfile
+
+while (<>) {
+  @F = split;
+
+  $v = $F[1];  #age
+  printf ("%g ", ($v-1)/8);  #no missing values
+
+  $v = $F[3];  #rectal temperature
+  if ($v eq "?") {
+    printf ("0 1 ");
+  }
+  else {
+    $v = ($v - 35.4)/(40.8-35.4);
+    printf ("%g 0 ", $v);
+  }
+
+  $v = $F[4];  #pulse
+  if ($v eq "?") {
+    printf ("0 1 ");
+  }
+  else {
+    $v = ($v - 30)/(184-30);
+    printf ("%g 0 ", $v);
+  }
+
+  $v = $F[5];  #respiratory rate
+  if ($v eq "?") {
+    printf ("0 1 ");
+  }
+  else {
+    $v = $v/96;
+    printf ("%g 0 ", $v);
+  }
+
+  $v = $F[6];  #temperature of extremeties
+  if ($v eq "?") {
+    printf ("0 1 ");
+  }
+  else {
+    printf ("%g 0 ", $v == 2 ? 0 :
+                     $v == 1 ? 0.33 :
+                     $v == 3 ? 0.66 :
+                     $v == 4 ? 1 : 11111);
+  }
+
+  $v = $F[7];  #peripheral pulse
+  if ($v eq "?") {
+    printf ("0 1 ");
+  }
+  else {
+    printf ("%g 0 ", $v == 4 ? 0 :
+                     $v == 3 ? 0.33 :
+                     $v == 1 ? 0.66 :
+                     $v == 2 ? 1 : 11111);
+  }
+
+  $v = $F[8];
+  if ($v eq "?") {
+    printf ("0 0 0 0 0 0 1 ");
+  }
+  else {
+    printf ("%s 0 ", $v == 1 ? "1 0 0 0 0 0" :
+                     $v == 2 ? "0 1 0 0 0 0" :
+                     $v == 3 ? "0 0 1 0 0 0" :
+                     $v == 4 ? "0 0 0 1 0 0" :
+                     $v == 5 ? "0 0 0 0 1 0" :
+                     $v == 6 ? "0 0 0 0 0 1" : "##########");
+  }
+
+  $v = $F[9];  #capillary refill time
+  if ($v eq "?") {
+    printf ("0 1 ");
+  }
+  else {
+    printf ("%d 0 ", $v-1);
+  }
+
+  $v = $F[10];  #pain estimation
+  if ($v eq "?") {
+    printf ("0 0 0 0 0 1 ");
+  }
+  else {
+    printf ("%s 0 ", $v == 1 ? "1 0 0 0 0" :
+                     $v == 2 ? "0 1 0 0 0" :
+                     $v == 3 ? "0 0 1 0 0" :
+                     $v == 4 ? "0 0 0 1 0" :
+                     $v == 5 ? "0 0 0 0 1" : "##########");
+  }
+
+  $v = $F[11];  #peristalsis
+  if ($v eq "?") {
+    printf ("0 1 ");
+  }
+  else {
+    $v = ($v - 1)/(4-1);
+    printf ("%4.2f 0 ", $v);
+  }
+
+  $v = $F[12];  #abdominal distension
+  if ($v eq "?") {
+    printf ("0 0 0 0 0 1 ");
+  }
+  else {
+    printf ("%s ",   $v == 1 ? "1 0 0 0" :
+                     $v == 2 ? "0 1 0 0" :
+                     $v == 3 ? "0 0 1 0" :
+                     $v == 4 ? "0 0 0 1" : "##########");
+    $v = ($v - 1)/(4-1);
+    printf ("%4.2f 0 ", $v);
+  }
+
+  $v = $F[13];  #nasogastric tube gas emission
+  if ($v eq "?") {
+    printf ("0 1 ");
+  }
+  else {
+    $v = ($v - 1)/2;
+    printf ("%g 0 ", $v);
+  }
+
+  $v = $F[14];  #nasogastric reflux
+  if ($v eq "?") {
+    printf ("0 1 ");
+  }
+  else {
+    $v = ($v - 1)/2;
+    printf ("%g 0 ", $v);
+  }
+
+  $v = $F[15];  #nasogastric reflux pH
+  if ($v eq "?") {
+    printf ("0 1 ");
+  }
+  else {
+    $v = $v/8.5;
+    printf ("%g 0 ", $v);
+  }
+
+  $v = $F[16];  #rectal examination
+  if ($v eq "?") {
+    printf ("0 1 ");
+  }
+  else {
+    printf ("%g 0 ", $v == 4 ? 0 :
+                     $v == 3 ? 0.33 :
+                     $v == 1 ? 0.66 :
+                     $v == 2 ? 1 : "##########");
+  }
+
+  $v = $F[17];  #abdomen
+  if ($v eq "?") {
+    printf ("0 0 0 0 0 1 ");
+  }
+  else {
+    printf ("%s 0 ", $v == 1 ? "1 0 0 0 0" :
+                     $v == 2 ? "0 1 0 0 0" :
+                     $v == 3 ? "0 0 1 0 0" :
+                     $v == 4 ? "0 0 0 1 0" :
+                     $v == 5 ? "0 0 0 0 1" : "##########");
+  }
+
+  $v = $F[18];  #packed cell volume
+  if ($v eq "?") {
+    printf ("0 1 ");
+  }
+  else {
+    $v = $v/75;
+    printf ("%g 0 ", $v);
+  }
+
+  $v = $F[19];  #total protein
+  if ($v eq "?") {
+    printf ("0 1 ");
+  }
+  else {
+    $v = $v/89;
+    printf ("%g 0 ", $v);
+  }
+
+  $v = $F[20];  #abdominocentesis appearance
+  if ($v eq "?") {
+    printf ("0 0 0 1 ");
+  }
+  else {
+    printf ("%s 0 ", $v == 1 ? "1 0 0" :
+                     $v == 2 ? "0 1 0" :
+                     $v == 3 ? "0 0 1" : "##########");
+  }
+
+  $v = $F[21];  #abdominocentesis total protein
+  if ($v eq "?") {
+    printf ("0 1 ");
+  }
+  else {
+    $v = $v/10.1;
+    printf ("%g 0 ", $v);
+  }
+
+  $v = $F[22];  #OUTPUT: what happened to the horse
+  printf ("%s\n", $v == 1 ? "1 0 0" :
+                  $v == 2 ? "0 1 0" :
+                  $v == 3 ? "0 0 1" : "##########");
+}

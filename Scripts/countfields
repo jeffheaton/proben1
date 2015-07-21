@@ -1,0 +1,18 @@
+#!/usr/local/bin/perl
+#
+# Lutz Prechelt, 94/02/14
+#
+# Find records with different number of fields.
+# Fields are separated by blanks
+#
+# usage: countfields inputfile
+
+$n = 0;
+while (<>) {
+  @vals = split;
+  if ($#vals != $n) {
+    printf ("%5d: %d\n", $., $#vals+1);
+    print $_;
+    $n = $#vals;
+  }
+}

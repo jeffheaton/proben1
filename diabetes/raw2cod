@@ -1,0 +1,39 @@
+#!/tools/bin/perl
+#
+# Lutz Prechelt, 94/02/14
+#
+# Encodes 'diabetes' raw data file into a training file.
+#
+# usage: raw2cod inputfile >outputfile
+
+while (<>) {
+  @F = split (",");
+
+  $v = $F[0]/17;
+  printf ("%g ", $v);
+
+  $v = $F[1]/200;
+  printf ("%g ", $v);
+
+  $v = $F[2]/122;
+  printf ("%g ", $v);
+
+  $v = $F[3]/100;
+  printf ("%g ", $v);
+
+  $v = $F[4]/846;
+  printf ("%g ", $v);
+
+  $v = $F[5]/67.1;
+  printf ("%g ", $v);
+
+  $v = ($F[6] - 0.078)/(2.42-0.078);
+  printf ("%g ", $v);
+
+  $v = ($F[7] - 21)/(81-21);
+  printf ("%g ", $v);
+
+  $v = $F[8];
+  printf ("%s\n", $v == 0 ? "0 1" : "1 0");
+}
+

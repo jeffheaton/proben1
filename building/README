@@ -1,0 +1,62 @@
+
+ Files in the 'proben1/building' directory:
+============================================
+
+This dataset is problem A of the "Great energy predictor shootout" contest.
+("The Great Energy Predictor Shootout" - The First Building Data Analysis And
+Prediction Competition; ASHRAE Meeting; Denver, Colorado; June, 1993;
+co-chaired by Jan F. Kreider and Jeff S. Haberl;
+active Period:  December 1, 1992 -  April 30, 1993)
+
+building.raw
+  Concatenation of ~/shootout/atrain.dat and a_ans.dat with first line removed.
+  This is the removed line:
+  MONTH  DAY  YEAR  HOUR  TEMP  HUMID  SOLAR  WIND  WBE  WBCW  WBHW
+
+building.num
+  building.raw except for the month day year fields replaced by a running 
+  number
+  
+building.cod
+  building.num encoded in the way described in 'Design'
+
+header
+  Header lines used in the .dt files
+
+building1.dt
+  building.cod with header lines added
+  
+building2.dt
+building3.dt
+  two different permutations of the lines of building.cod plus the header lines
+
+raw2num
+num2cod
+  Perl scripts for format conversions:
+  - raw2num converts day/month/year into running record number
+  - num2cod embeds the design decisions about the input and output encoding
+
+ 
+
+Encoding:
+==========
+
+Date:  Encode weekday as nominal value.
+       Encoding day of year as one continuous value means that we extrapolate!
+       This is dangerous. Since the same kind of information that the day of
+       year can give us (namely change of season) is already encoded in the 
+       weather data, we leave the day of year out of the input encoding
+       altogether.
+
+Hour:  Don't encode hours nominally, although they will be a major information
+       source, because this would have the disadvantage to split the data set
+       into many quite small pieces (3000 / (24 * 7) = 18).
+       The alternative is to encode hours by "distance from midnight", e.g.
+       700 would be 0.7 and 2000 would be 0.4
+       Since this destroys the AM/PM information, we supply a monotone
+       0...1 value for the time plus an AM bit of -1/+1 additionally.
+       
+Weather:
+       Encode temp, humid, solar, wind as 0..1 quantities
+       Encode wbcw, wbhw, wbe as 0...1 quantities.
+

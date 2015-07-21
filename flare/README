@@ -1,0 +1,88 @@
+
+ Files in the 'proben1/flare' directory:
+=========================================
+
+This dataset is from the UCI machine learning database:
+"solar flare"
+
+[Remark: some of the generated files may not exist in order to save disk space]
+
+flare.names
+  Original documentation for the dataset
+
+flare.data2
+  Original data file
+
+flare.raw
+  flare.data2 with first line removed.
+
+flare.cod
+  flare.raw encoded (using raw2cod)
+
+header
+  Header lines used in .dt files
+
+flare?.dt
+  different permutations of the lines of cod file plus the header lines
+
+raw2cod
+  Perl script for format conversions:
+  takes flare.raw as input and produces flare.cod as output according
+  to the rules given in section 'encoding' below.
+
+Makefile
+  Makefile to call scripts and programs to create .dt files
+
+ 
+ Encoding:
+===========
+
+Attribute Information (no missing values):
+0. Code for class (modified Zurich class)  (A,B,C,D,E,F,H)
+ 7  1-of-7
+1. Code for largest spot size              (X,R,S,A,H,K)
+ 6  1-of-6  (probably some continuous encoding is possible, but which?)
+2. Code for spot distribution              (X,O,I,C)
+ 4  1-of-4
+3. Activity                                (1 = reduced, 2 = unchanged)
+ 1  binary
+4. Evolution                     (1 = decay, 2 = no growth, 3 = growth)
+ 1  continuous  1->0, 2->0.5, 3->1
+5. Previous 24 hour flare activity code    (1 = nothing as big as an M1,
+                              2 = one M1, 3 = more activity than one M1)
+ 1 continuous   1->0, 2->0.5, 3->1
+6. Historically-complex                    (1 = Yes, 2 = No)
+ 1  binary
+7. Did region become historically complex  (1 = yes, 2 = no) 
+    on this pass across the sun's disk
+ 1  binary
+8. Area                                    (1 = small, 2 = large)
+ 1  binary
+9. Area of the largest spot                (1 = <=5, 2 = >5)
+ 1  binary
+--------
+24 inputs
+
+(Using this encoding, inputs 0 and 23 are constant 0)
+From all these attributes, three classes of flares are predicted, which are 
+represented in the last three columns.
+
+10. C-class flares production by this region    Number  
+      in the following 24 hours (common flares)
+ 1  continuous  0...8 -> 0...1
+11. M-class flares production by this region    Number
+      in the following 24 hours (moderate flares)
+ 1  continuous  0...8 -> 0...1
+12. X-class flares production by this region    Number
+      in the following 24 hours (severe flares)
+ 1  continuous  0...2 -> 0...1
+------
+ 3 outputs
+
+
+Class distribution:
+                    0    1  2  3  4  5  6  7  8  Total
+   C-class flares  884 112 33 20  9  4  3  0  1  1066
+   M-class flares 1030  29  3  2  1  0  1  0  0  1066
+   X-class flares 1061   4  1  0  0  0  0  0  0  1066
+

@@ -1,0 +1,52 @@
+#!/tools/bin/perl
+#
+# Lutz Prechelt, 94/01/18
+#
+# Encodes a raw file into a training or testfile by nominally encoding the 
+# weekday as 1-of-n, the hours as a distance from noon, and some other
+# quirks (see below).
+# to get an output field documentation do
+# grep '#####' num2cod
+#
+# usage: num2cod inputfile >outputfile
+
+$nr = 1;
+
+while (<>) {
+  ($nr, $hour, $temp, $humid, $solar, $wind, $wbe, $wbcw, $wbhw) = split;
+  #print ("$nr, $hour, $temp, $humid, $solar, $wind, $wbe, $wbcw, $wbhw\n");
+  #Input:  1    2     3     4      5      6     7       8     9
+  #        NR  HOUR  TEMP  HUMID  SOLAR  WIND  WBE    WBCW  WBHW
+
+  ##### weekday: 7 fields with 1-of-7 encoding: 0 = false, 1 = true
+  $weekday = int (int (($nr+1) / 24) % 7); # $nr+1 because nr 1 is 2:00 clock
+  #@WD = (-1, -1, -1, -1, -1, -1, -1);   # or better zero ???
+  @WD = (0, 0, 0, 0, 0, 0, 0);
+  $WD[$weekday] = 1;
+  printf (STDOUT "%s ", join (" ", @WD));
+
+  ##### hour:   1 field 0...1 range, 2 fields -1...1 range, AM bit
+  # hour is encoded as 'distance from noon' in a 0..1 and as
+  # a direct continuous value in -1...1 range
+  $Nhour1 = (($hour - 12) < 0 ? -($hour - 12) : ($hour - 12)) / 12;    # 0...1
+  $Nhour2 = $hour / 23;
+  printf (STDOUT "%g %g %d ", $Nhour1, 2*$Nhour2 - 1, $hour < 12 ? 1 : -1);
+
+  ##### temp, humid, solar, wind:  4 fields 0...1 range
+  #NEW = (($OLD - min) / (max - min))  --->  0...1 range
+  $Ntemp  = (($temp - 0) / (100 - 0));
+  $Nhumid = (($humid - 0) / (0.025 - 0));
+  $Nsolar = (($solar - -10) / (1050 - -10));
+  $Nwind  = (($wind - 0) / (28 - 0));
+  printf (STDOUT "%g %g %g %g ", $Ntemp, $Nhumid, $Nsolar, $Nwind);
+  #printf (STDOUT "%g %g %g %g ", 2*$Ntemp - 1, 2*$Nhumid - 1, 2*$Nsolar - 1, 
+  #        2*$Nwind - 1);   # -1...1 range
+
+  ##### wbe, wbcw, wbhw:   3 fields 0...0.9 range
+  $Nwbe  = (($wbe - 0) / (1300 - 0));
+  $Nwbcw = (($wbcw - -1) / (11 - -1));
+  $Nwbhw = (($wbhw - -0.8) / (8 - -0.8));
+  printf (STDOUT "%g %g %g", 0.9*$Nwbe, 0.9*$Nwbcw, 0.9*$Nwbhw);
+
+  print ("\n");
+}

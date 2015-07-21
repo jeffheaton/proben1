@@ -1,0 +1,196 @@
+
+ Files in the 'proben1/soybean' directory:
+============================================
+
+This dataset is from the UCI machine learning database:
+"soybean"
+
+[Remark: some of the generated files may not exist in order to save disk space]
+
+soybean-large.names
+  Original documentation for the dataset
+
+soybean-large.data
+soybean-large.test
+  Original data files
+
+soybean.raw
+  Concatenation of soybean-large.data and soybean-large.test
+
+soybean.cod
+  soybean.raw encoded (using raw2cod)
+
+header
+  Header lines used in .dt files
+
+soybean?.dt
+  different permutations of the lines of cod file plus the header lines
+
+raw2cod
+  Perl script for format conversions:
+  takes soybean.raw as input and produces soybean.cod as output according
+  to the rules given in section 'encoding' below.
+
+Makefile
+  Makefile to call scripts and programs to create .dt files
+
+
+ 
+ Encoding:
+===========
+
+In the original representation, all attributes are 'nominalized'.
+For a neural network, however, some of them can be used as ordered
+attributes that can be put onto a sensible(?) scale. These are thus encoded
+as one continuous input (perhaps two, if missing values occur for this
+attribute). Some of the attributes with missing values just use a default
+for the missing values instead of representing 'is missing' explicitly.
+Some of the attributes that have three or four values (including '?' perhaps)
+are encoded binary with two inputs.
+[Brute force 1-of-n encoding would result in having 135 inputs]
+
+The output class is encoded as 1-of-19.
+
+In contrast to some published papers about this data, we try to use
+all 19 classes, even though there is only little data for some of them (not
+only a small number of records, but also VERY many missing values).
+
+Class distribution:
+   8 herbicide-injury
+  14 cyst-nematode
+  15 diaporthe-pod-&-stem-blight
+  16 2-4-d-injury
+  20 bacterial-blight
+  20 bacterial-pustule
+  20 charcoal-rot
+  20 diaporthe-stem-canker
+  20 downy-mildew
+  20 phyllosticta-leaf-spot
+  20 powdery-mildew
+  20 purple-seed-stain
+  20 rhizoctonia-root-rot
+  44 anthracnose
+  44 brown-stem-rot
+  88 phytophthora-rot
+  91 alternarialeaf-spot
+  91 frog-eye-leaf-spot
+  92 brown-spot
+---------
+ 683 instances, 19 classes
+
+Attribute encoding (all values encoded numerically 1,2,3.. in original file):
+ 0. class
+ 1. date:            april,may,june,july,august,september,october,?. [miss:1]
+  1   0...6 -> 0...1, ? -> 0 
+ 2. plant-stand:     normal,lt-normal,?.  [miss: 36]
+  1                    0      1       0
+ 3. precip:          lt-norm,norm,gt-norm,?. [miss: 38]
+  2                    -1 0   0 0   1 0   0 1
+ 4. temp:            lt-norm,norm,gt-norm,?. [miss: 30]
+  2                    0 0   0.5 0   1 0  0 1
+ 5. hail:            yes,no,?.  [miss: 121]
+  2                  10  00 01
+ 6. crop-hist:       diff-lst-year,same-lst-yr,same-lst-two-yrs,
+  2                    0 0          0.33 0        0.66 0    
+                     same-lst-sev-yrs,?.   [miss: 16]
+                       1 0           0 1
+ 7. area-damaged:    scattered,low-areas,upper-areas,whole-field,?.  [miss: 1]
+  2                    0 0       0 1       1 0         1 1       0 0
+ 8. severity:        minor,pot-severe,severe,?.  [miss: 121]
+  2                   0 0   0.5 0      1 0   0 1
+ 9. seed-tmt:        none,fungicide,other,?.  [miss: 121]
+  2                   0 0  1 0       0 1  1 1
+10. germination:     90-100%,80-89%,lt-80%,?.  [miss: 112]
+  2                   1 0    0.5 0   0 0   0 1
+11. plant-growth:    norm,abnorm,?.  [miss: 16]
+  1                   0      1   0
+12. leaves:          norm,abnorm.  [miss: 0]
+  1                   0      1
+13. leafspots-halo:  absent,yellow-halos,no-yellow-halos,?.  [miss: 84]
+  2                   0 0    0 1            1 0          1 1
+14. leafspots-marg:  w-s-marg,no-w-s-marg,dna,?.  [miss: 84]
+  2                   0 0      1 0       0.5 0 0 1
+15. leafspot-size:   lt-1/8,gt-1/8,dna,?.  [miss: 84]
+  2                   0 0     1 0  0.5 0 0 1
+16. leaf-shread:     absent,present,?.  [miss: 100]
+  2                   0 0     1 0   0 1
+17. leaf-malf:       absent,present,?.  [miss: 84]
+  2                   0 0     1 0   0 1
+18. leaf-mild:       absent,upper-surf,lower-surf,?.  [miss: 108]
+  3                  0 0 0  1 0 0       0 1 0     0 0 1
+19. stem:            norm,abnorm,?.  [miss: 16]
+  1                   0   1      0.5
+20. lodging:         yes,no,?.  [miss: 121]
+  2                  0 0 1 0 0 1
+21. stem-cankers:    absent,below-soil,above-soil,above-sec-nde,?.  [miss: 38]
+  4                  0000   1000       0100       0010          0001
+22. canker-lesion:   dna,brown,dk-brown-blk,tan,?.  [miss: 38]
+  4                  0000 1000 0100         0010 0001
+23. fruiting-bodies: absent,present,?.  [miss: 106]
+  2                  0 0    1 0     0 1
+24. external decay:  absent,firm-and-dry,watery,?.  [miss: 38]
+  4                  1000   0100         0010  0001
+25. mycelium:        absent,present,?.  [miss: 38]
+  2                  0 0    1 0     0 1
+26. int-discolor:    none,brown,black,?.  [miss: 38]
+  4                  1000 0100  0010  0001
+27. sclerotia:       absent,present,?.  [miss: 38]
+  2                  0 0    1 0     0 1
+28. fruit-pods:      norm,diseased,few-present,dna,?.  [miss: 84]
+  4                  1000 0100     0010       0000 0001
+29. fruit spots:     absent,colored,brown-w/blk-specks,distort,dna,?. [miss: 106]
+  6                  100000 010000  001000             000100 000010 000001
+30. seed:            norm,abnorm,?.  [miss: 92]
+  2                  0 0    1 0     0 1
+31. mold-growth:     absent,present,?.  [miss: 92]
+  2                  0 0    1 0     0 1
+32. seed-discolor:   absent,present,?.  [miss: 106]
+  2                  0 0    1 0     0 1
+33. seed-size:       norm,lt-norm,?.  [miss: 92]
+  2                  0 0    1 0     0 1
+34. shriveling:      absent,present,?.  [miss: 106]
+  2                  0 0    1 0     0 1
+35. roots:           norm,rotted,galls-cysts,?.  [miss: 31]
+  4                  1000 0100   0010        0001
+--------
+ 82 inputs
+
+
+value ranges: 
+  0: -
+  1: 0...6
+  2: 0...1
+  3: 0...2
+  4: 0...2
+  5: 0...1
+  6: 0...3
+  7: 0...3
+  8: 0...2
+  9: 0...2
+ 10: 0...2
+ 11: 0...1
+ 12: 0...1
+ 13: 0...2
+ 14: 0...2
+ 15: 0...2
+ 16: 0...1
+ 17: 0...1
+ 18: 0...2
+ 19: 0...1
+ 20: 0...1
+ 21: 0...3
+ 22: 0...3
+ 23: 0...1
+ 24: 0...2
+ 25: 0...1
+ 26: 0...2
+ 27: 0...1
+ 28: 0...3
+ 29: 0...4
+ 30: 0...1
+ 31: 0...1
+ 32: 0...1
+ 33: 0...1
+ 34: 0...1
+ 35: 0...2
+

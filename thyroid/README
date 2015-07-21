@@ -1,0 +1,82 @@
+
+ Files in the 'proben1/thyroid' directory:
+===========================================
+
+This dataset is from the UCI machine learning database:
+"thyroid disease"
+
+[Remark: some of the generated files may not exist in order to save disk space]
+
+ann-thyroid.names
+ann-Readme
+  Original documentation for the dataset
+
+ann-train.data
+ann-test.data
+  Original data files (this partitioning was used for results reported
+  by Randolf Werner)
+
+thyroid.raw
+  Concatenation of ann-train.data and ann-test.data
+
+thyroid.cod
+  thyroid.raw with class number converted into three output values.
+
+header
+  Header lines used in .dt files
+
+thyroid1.dt
+  thyroid.cod with header lines added
+  
+thyroid2.dt
+thyroid3.dt
+  two different permutations of the lines of thyroid.cod plus the header lines
+
+raw2cod
+  Perl script for format conversions:
+  takes thyroid.raw as input and produces thyroid.cod as output according
+  to the rules given in section 'encoding' below.
+
+Makefile
+  Makefile to call scripts and programs to create .dt files
+
+
+ 
+ Encoding:
+===========
+
+The encoding is used exactly as given in the original data file.
+raw2cod only replaces the class number (1, 2, or 3) with a 1-of-3
+encoding (1 0 0, 0 1 0, or 0 0 1)
+
+Experiments reported before used the first 3772 records of thyroid.cod as
+training data and the remaining 3428 records as test data (see ann-Readme).
+
+Class distribution:
+> egrep '1 *$' ann-train.data | wc -l
+      93
+> egrep '2 *$' ann-train.data | wc -l
+     191
+> egrep '3 *$' ann-train.data | wc -l
+    3488
+> egrep '1 *$' ann-test.data | wc -l
+      73
+> egrep '2 *$' ann-test.data | wc -l
+     177
+> egrep '3 *$' ann-test.data | wc -l
+    3178
+
+Class         1      2      3    total
+---------------------------------------
+train #      93    191   3488    3772
+train %     2.5    5.1   92.5   100.1
+
+test  #      73    177   3178    3428
+test  %     2.1    5.2   92.7   100.0
+
+total #     166    368   6666    7200
+total %     2.3    5.1   92.6   100.0
+
+This class distribution means that a neural network with but one weight
+can achieve 92.6% classification accuracy.
+But don't think that the problem is boring...

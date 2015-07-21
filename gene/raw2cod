@@ -1,0 +1,34 @@
+#!/tools/bin/perl
+#
+# Lutz Prechelt, 94/01/24
+#
+# Encodes 'splice-junction' raw data file into a training file.
+# lines containing an illegal nucleotid character or class are marked
+# by a trailing ##, so that they can be removed by 'grep -v'
+#
+# usage: raw2cod inputfile >outputfile
+
+$nr = 1;
+
+while (<>) {
+  ($class, $name, $seq) = split;
+  #Input:  1       2     3     
+  #        Class  Name  Sequence
+
+  $illegal = 0;
+  for ($i = 0; $i < 60; $i++) {
+    $g = substr ($seq, $i, 1);
+    printf ("-1 -1 ") if ($g eq "C");
+    printf ("-1  1 ") if ($g eq "A");
+    printf (" 1 -1 ") if ($g eq "G");
+    printf (" 1  1 ") if ($g eq "T");
+    $illegal += index("CAGT", $g) < 0;
+  }
+  die "wrong sequence length " if length ($seq) != 60;
+  printf (" 1  0  0") if ($class eq "EI,");
+  printf (" 0  1  0") if ($class eq "IE,");
+  printf (" 0  0  1") if ($class eq "N,");
+  $illegal += index("|EI,|IE,|N,|", $class) < 0;
+  printf (" ##") if ($illegal);
+  print ("\n");
+}

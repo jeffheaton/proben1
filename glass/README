@@ -1,0 +1,73 @@
+
+ Files in the 'proben1/glass' directory:
+=========================================
+
+This dataset is from the UCI machine learning database:
+"glass"
+
+[Remark: some of the generated files may not exist in order to save disk space]
+
+glass.names
+  Original documentation for the dataset
+
+glass.data
+  Original data file
+
+glass.raw
+  Symbolic link to glass.data
+
+glass.cod
+  glass.raw encoded (using raw2cod)
+
+header
+  Header lines used in .dt files
+
+glass?.dt
+  different permutations of the lines of cod file plus the header lines
+
+raw2cod
+  Perl script for format conversions:
+  takes glass.raw as input and produces glass.cod as output according
+  to the rules given in section 'design' below.
+
+Makefile
+  Makefile to call scripts and programs to create .dt files
+
+
+ Encoding:
+===========
+
+All attributes except the identification number are used as they are given.
+The only transformations are normalization to 0...1 for the continuous
+input attributes and 1-of-6 encoding for the output attribute.
+
+Attribute Information (no missing values):
+0. Id number: 1 to 214
+  0
+1. RI: refractive index  1.51115...1.53393
+  1
+2. Na: Sodium  10.73...17.38 
+  1
+3. Mg: Magnesium  0.33...4.49
+  1
+4. Al: Aluminum  0.29...3.5
+  1
+5. Si: Silicon  69.81...75.41
+  1
+6. K: Potassium  0.02...6.21
+  1
+7. Ca: Calcium  5.43...16.19
+  1
+8. Ba: Barium  0.06...3.15
+  1
+9. Fe: Iron  0.01...0.51
+  1
+---------
+  9 inputs
+
+10. Type of glass: 1, 2, 3, 5, 6, or 7   (6 classes)
+  6
+---------
+  6 outputs
+
+
